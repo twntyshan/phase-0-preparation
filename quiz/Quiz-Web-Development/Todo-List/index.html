@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>todo list</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header><h2>My To Do List</h2></header>
+    <main>
+        <section>
+            <form id="searchForm">
+                <input type="search" id="searchInput" placeholder="Searh task..."/>
+            </form>
+            <form id="addForm">
+                <input type="text" id="addInput" placeholder="Title..."/>
+                <button type="submit">Add</button>
+            </form>
+
+        </section>
+
+        <section>
+            <ul id="myUL">
+                <li>Hit the gym</li>
+                <li class="checked">Pay bills</li>
+                <li>Meet George</li>
+                <li>Buy eggs</li>
+                <li>Read a book</li>
+                <li>Organize office</li>
+            </ul>
+        </section>
+    </main>
+    <script>
+        document.querySelectorAll('#myUL li').forEach(function(li) {
+        let span = document.createElement('span');
+        span.textContent = '\u00D7';
+        span.className = 'close';
+        li.appendChild(span);
+        });
+
+        // Toggle checked & delete (event delegation)
+        document.querySelector('#myUL').addEventListener('click', function(e) {
+
+            if (e.target.tagName === 'LI') {
+                e.target.classList.toggle('checked');
+            }
+
+            if (e.target.classList.contains('close')) {
+                e.target.parentElement.remove();
+            }
+        });
+
+        // Form submit
+        document.getElementById('addForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            newElement();
+        });
+
+        function newElement() {
+            let input = document.getElementById('addInput');
+            let value = input.value.trim();
+
+            if (value === '') {
+                alert('You must write something!');
+                return;
+            }
+
+            let li = document.createElement('li');
+            li.textContent = value;
+
+            let span = document.createElement('span');
+            span.textContent = '\u00D7';
+            span.className = 'close';
+
+            li.appendChild(span);
+            document.getElementById('myUL').appendChild(li);
+
+            input.value = '';
+        }
+
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            let filter = this.value.toLowerCase();
+            let li = document.querySelectorAll('#myUL li');
+
+        li.forEach(function(item) {
+            let text = item.firstChild.textContent.toLowerCase();
+            if (text.includes(filter)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+        });
+</script>
+
+</body>
+</html>
